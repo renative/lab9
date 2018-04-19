@@ -1,0 +1,78 @@
+<html>
+<head>
+<title> Particles</title>
+<script>
+  var canvas;
+  var context;
+  var particles;
+  var timer;
+  function degreesToRadians(degrees){
+    return (degrees * Math.PI)/180;
+  }
+  function makeParticles() {
+    particles =[];
+    for (var i=0; i<30; i++){
+      particles.push(new Particle());
+    }
+  }
+  function moveParticles() {
+    context.globalCompositeOperation = 'source-over';
+    context.fillStyle = 'rgba(0, 0, 0, 0.3)';
+    context.fillRect(0,0,canvas.width,canvas.height);
+    context.globalCompositeOperation = 'lighter';
+    for (var i=0; i < particles.length; i++) {
+
+
+
+      var p = particles[i];
+      context.beginPath();
+      context.arc(p.x, p.y, p.radius ,0, degreesToRadians(360), true);
+      context.fillStyle = p.color;
+      context.fill();
+
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < -50) {
+        p.x = canvas.width + 50;
+      }
+      if (p.y < -50) {
+        p.y = canvas.height + 50;
+      }
+      if (p.x > canvas.width + 50) {
+        p.x = -50;
+      }
+      if (p.y > canvas.height + 50){
+        p.y = -50;
+      }
+      particles[i].radius -= 0.5;
+  if (particles[i].radius < 1)
+    {
+      particles.splice(i, 1);
+    }
+    }
+  }
+  function Particle() {
+    this.x =  500  ;
+    this.y = 300 ;
+    this.vx = Math.random() * 10 - 5;
+    this.vy = Math.random() * 10 - 5;
+    var colors = ['crimson', 'red', 'magenta',, 'white','pink','orange'];
+    this.color = colors[Math.floor(Math.random() * colors.length)];
+    this.radius = 30;
+  }
+
+  window.onload = function() {
+    canvas = document.getElementById('canvas');
+    context = canvas.getContext('2d');
+    makeParticles();
+    timer = setInterval(moveParticles, 100);
+    timer = setInterval(moveParticles, 4500);
+
+
+  }
+</script>
+</head>
+<body>
+  <canvas id="canvas" width="1000" height="600"></canvas>
+</body>
+</html>
